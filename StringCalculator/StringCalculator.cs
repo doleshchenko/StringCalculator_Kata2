@@ -6,6 +6,13 @@ namespace StringCalculator
 {
     public class StringCalculator
     {
+        private readonly ILogger _logger;
+
+        public StringCalculator(ILogger logger)
+        {
+            _logger = logger;
+        }
+
         public int Add(string numbers)
         {
             var delimiters = new []{ ",", "\n"};
@@ -31,7 +38,11 @@ namespace StringCalculator
                 throw new NegativeNumberException(negatives.ToArray());
             }
             var numbersToCalculate = realNumbers.Where(it => it <= maxNumber).ToArray();
-            return numbersToCalculate.Sum();
+            var sumResult = numbersToCalculate.Sum();
+
+            _logger.Write($"sum result: {sumResult}");
+
+            return sumResult;
         }
     }
 }
