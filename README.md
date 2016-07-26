@@ -1,0 +1,1 @@
+# StringCalculator_Kata2
