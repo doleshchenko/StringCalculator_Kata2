@@ -1,4 +1,5 @@
-﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
+﻿using System;
+using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Moq;
 
 namespace StringCalculator.UnitTests
@@ -8,13 +9,15 @@ namespace StringCalculator.UnitTests
     {
         private const string LogMessageTemplate = "sum result: {0}";
         private Mock<ILogger> _loggerMock;
+        private Mock<IWebservice> _webServiceMock; 
         private StringCalculator _calculator;
 
         [TestInitialize]
         public void Initialize()
         {
             _loggerMock = new Mock<ILogger>();
-            _calculator = new StringCalculator(_loggerMock.Object);
+            _webServiceMock = new Mock<IWebservice>();
+            _calculator = new StringCalculator(_loggerMock.Object, _webServiceMock.Object);
         }
 
         [TestMethod]
@@ -112,6 +115,26 @@ namespace StringCalculator.UnitTests
             const int expectedResult = 3;
             Assert.AreEqual(expectedResult, result, "Method should have returned 3 for \"1,2\" string.");
             _loggerMock.Verify(it => it.Write(string.Format(LogMessageTemplate, expectedResult)), Times.Once);
+        }
+
+        [TestMethod]
+        public void Add_TwoNumbersWithCommaDelimiterAsInputParam_ReturnsSumOfInputNumbersAndLoggerThrowsException()
+        {
+            const int expectedResult = 3;
+
+            var loggerMock = new Mock<ILogger>();
+            loggerMock.Setup(it => it.Write(string.Format(LogMessageTemplate, expectedResult))).Throws(new Exception(string.Format(LogMessageTemplate, expectedResult)));
+
+            var webServiceMock = new Mock<IWebservice>();
+            webServiceMock.Setup(it => it.LoggingFailed(string.Format(LogMessageTemplate, expectedResult)));
+
+            _calculator = new StringCalculator(loggerMock.Object, webServiceMock.Object);
+
+            var result = _calculator.Add("1,2");
+            Assert.AreEqual(expectedResult, result, "Method should have returned 3 for \"1,2\" string.");
+
+            loggerMock.VerifyAll();
+            webServiceMock.VerifyAll();
         }
     }
 }

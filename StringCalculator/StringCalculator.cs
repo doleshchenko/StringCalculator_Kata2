@@ -7,10 +7,12 @@ namespace StringCalculator
     public class StringCalculator
     {
         private readonly ILogger _logger;
+        private readonly IWebservice _webservice;
 
-        public StringCalculator(ILogger logger)
+        public StringCalculator(ILogger logger, IWebservice webservice)
         {
             _logger = logger;
+            _webservice = webservice;
         }
 
         public int Add(string numbers)
@@ -40,7 +42,14 @@ namespace StringCalculator
             var numbersToCalculate = realNumbers.Where(it => it <= maxNumber).ToArray();
             var sumResult = numbersToCalculate.Sum();
 
-            _logger.Write($"sum result: {sumResult}");
+            try
+            {
+                _logger.Write($"sum result: {sumResult}");
+            }
+            catch (Exception e)
+            {
+                _webservice.LoggingFailed(e.Message);
+            }
 
             return sumResult;
         }
