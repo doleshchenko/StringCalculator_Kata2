@@ -9,7 +9,8 @@ namespace StringCalculator.UnitTests
     {
         private const string LogMessageTemplate = "sum result: {0}";
         private Mock<ILogger> _loggerMock;
-        private Mock<IWebservice> _webServiceMock; 
+        private Mock<IWebservice> _webServiceMock;
+        private Mock<IOutput> _outputMock;
         private StringCalculator _calculator;
 
         [TestInitialize]
@@ -17,7 +18,8 @@ namespace StringCalculator.UnitTests
         {
             _loggerMock = new Mock<ILogger>();
             _webServiceMock = new Mock<IWebservice>();
-            _calculator = new StringCalculator(_loggerMock.Object, _webServiceMock.Object);
+            _outputMock = new Mock<IOutput>();
+            _calculator = new StringCalculator(_loggerMock.Object, _webServiceMock.Object, _outputMock.Object);
         }
 
         [TestMethod]
@@ -128,13 +130,23 @@ namespace StringCalculator.UnitTests
             var webServiceMock = new Mock<IWebservice>();
             webServiceMock.Setup(it => it.LoggingFailed(string.Format(LogMessageTemplate, expectedResult)));
 
-            _calculator = new StringCalculator(loggerMock.Object, webServiceMock.Object);
+            var outputMock = new Mock<IOutput>();
+
+            _calculator = new StringCalculator(loggerMock.Object, webServiceMock.Object, outputMock.Object);
 
             var result = _calculator.Add("1,2");
             Assert.AreEqual(expectedResult, result, "Method should have returned 3 for \"1,2\" string.");
 
             loggerMock.VerifyAll();
             webServiceMock.VerifyAll();
+        }
+
+        [TestMethod]
+        public void Add_TwoNumbersWithCommaDelimiterAsInputParam_WritesResultToOuput()
+        {
+            _calculator.Add("1,2");
+            const int expectedResult = 3;
+            _outputMock.Verify(it => it.Write($"The result is {expectedResult}"), Times.Once);
         }
     }
 }

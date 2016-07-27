@@ -58,10 +58,15 @@
     </Otherwise>
   </Choose>
   <ItemGroup>
+    <Compile Include="StringCalculatorShellTest.cs" />
     <Compile Include="StringCalculatorTest.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\StringCalculator.Shell\StringCalculator.Shell.csproj">
+      <Project>{6475E7CA-924A-4961-A743-E40FE7EA5870}</Project>
+      <Name>StringCalculator.Shell</Name>
+    </ProjectReference>
     <ProjectReference Include="..\StringCalculator\StringCalculator.csproj">
       <Project>{E3CF03B8-9DEE-4C76-9087-1FDE327C8CDC}</Project>
       <Name>StringCalculator</Name>

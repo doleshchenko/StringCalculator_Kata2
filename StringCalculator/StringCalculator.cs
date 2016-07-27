@@ -8,11 +8,12 @@ namespace StringCalculator
     {
         private readonly ILogger _logger;
         private readonly IWebservice _webservice;
-
-        public StringCalculator(ILogger logger, IWebservice webservice)
+        private readonly IOutput _output;
+        public StringCalculator(ILogger logger, IWebservice webservice, IOutput output)
         {
             _logger = logger;
             _webservice = webservice;
+            _output = output;
         }
 
         public int Add(string numbers)
@@ -44,13 +45,13 @@ namespace StringCalculator
 
             try
             {
-                _logger.Write($"sum result: {sumResult}");
+                _logger?.Write($"sum result: {sumResult}");
             }
             catch (Exception e)
             {
-                _webservice.LoggingFailed(e.Message);
+                _webservice?.LoggingFailed(e.Message);
             }
-
+            _output?.Write($"The result is {sumResult}");
             return sumResult;
         }
     }
