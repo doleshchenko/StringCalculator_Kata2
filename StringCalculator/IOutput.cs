@@ -2,7 +2,10 @@
 {
     public interface IOutput
     {
-        void Write(string text);
+        void WriteMessage(string message);
+        void AskQuestion(string question);
         string GetLastMessage();
+        string GetLastQuestion();
+        string GetAnswer();
     }
 }

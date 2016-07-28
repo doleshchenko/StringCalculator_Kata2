@@ -51,7 +51,7 @@ namespace StringCalculator
             {
                 _webservice?.LoggingFailed(e.Message);
             }
-            _output?.Write($"The result is {sumResult}");
+            _output?.WriteMessage($"The result is {sumResult}");
             return sumResult;
         }
     }

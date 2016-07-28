@@ -146,7 +146,7 @@ namespace StringCalculator.UnitTests
         {
             _calculator.Add("1,2");
             const int expectedResult = 3;
-            _outputMock.Verify(it => it.Write($"The result is {expectedResult}"), Times.Once);
+            _outputMock.Verify(it => it.WriteMessage($"The result is {expectedResult}"), Times.Once);
         }
     }
 }
