@@ -16,7 +16,7 @@ namespace StringCalculator.UnitTests
         }
 
         [TestMethod]
-        public void Main_InvokeStringCalculator_OutputCalculationResultToConsole1()
+        public void Main_InvokeStringCalculatorAndInterpretUserCommands_OutputCalculationResultToConsole()
         {
             var outputStub = new OutputStub(new []{ "4,5,6" });
             Program.Ouput = outputStub;
